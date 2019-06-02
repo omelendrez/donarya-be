@@ -14,6 +14,7 @@ module.exports = (sequelize, type) => {
     address: type.STRING,
     password: type.STRING
   })
+
   Model.beforeSave(async (user, options) => {
     if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10)
@@ -21,6 +22,7 @@ module.exports = (sequelize, type) => {
       user.password = hash
     }
   })
+
   Model.prototype.comparePassword = async function (pw) {
     if (!this.password) {
       throwErr('Password was not set')
@@ -29,6 +31,7 @@ module.exports = (sequelize, type) => {
     if (!pass) throwErr('Invalid password')
     return this
   }
+
   Model.prototype.getJWT = function () {
     let expiration_time = parseInt(CONFIG.jwt_expiration)
     return (
@@ -38,5 +41,6 @@ module.exports = (sequelize, type) => {
       })
     )
   }
+
   return Model
 }
