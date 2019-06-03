@@ -2,7 +2,13 @@ const { User } = require('../models')
 
 const create = async (req, res) => {
   return User.create(req.body)
-    .then(user => res.status(201).json(user))
+    .then(user => {
+      const { name, username, email, dni, address, phone, createdAt, updatedAt } = user
+      const data = {
+        name, email, username, dni, address, phone, createdAt, updatedAt
+      }
+      res.status(201).json(data)
+    })
 }
 module.exports.create = create
 
