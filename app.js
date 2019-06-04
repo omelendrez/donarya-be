@@ -24,16 +24,11 @@ if (CONFIG.app === 'dev') {
   // models.sequelize.sync({ force: true });//deletes all tables then recreates them useful for testing and development purposes
 }
 
-app.use('/', v1)
-app.use('/', function (req, res) {
-  res.statusCode = 422
-  res.json({ success: false, error: 'Endpoint not found', data: {} })
-})
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    "GET, POST, OPTIONS, PUT, DELETE"
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -42,7 +37,11 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
-
+app.use('/', v1)
+app.use('/', function (req, res) {
+  res.statusCode = 422
+  res.json({ success: false, error: 'Endpoint not found', data: {} })
+})
 app.use(function (req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
