@@ -30,14 +30,19 @@ app.use('/', function (req, res) {
   res.json({ success: false, error: 'Endpoint not found', data: {} })
 })
 app.use(function (req, res, next) {
-  // Instead of "*" you should enable only specific origins
-  res.header('Access-Control-Allow-Origin', '*')
-  // Supported HTTP verbs
-  res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,PUT,POST,DELETE')
-  // Other custom headers
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
+
 app.use(function (req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
