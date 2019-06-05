@@ -33,7 +33,7 @@ module.exports = (sequelize, type) => {
     if (!this.password) {
       throwErr('Password was not set')
     }
-    const pass = await bcrypt_p.compare(pw, this.password)
+    const pass = await bcrypt_p.compare(pw)
     if (!pass) throwErr('Invalid password')
     return this
   }
