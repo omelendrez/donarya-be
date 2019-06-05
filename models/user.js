@@ -15,6 +15,12 @@ module.exports = (sequelize, type) => {
     password: type.STRING
   })
 
+  Model.beforeCreate(async (user, options) => {
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(user.password, salt)
+    user.password = hash
+  })
+
   Model.beforeSave(async (user, options) => {
     if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10)
