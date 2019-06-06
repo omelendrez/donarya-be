@@ -33,7 +33,12 @@ module.exports = (sequelize, type) => {
 
   Model.prototype.getToken = function () {
     const expiration_time = parseInt(CONFIG.jwt_expiration)
-    const token = jwt.sign({ userId: this.id }, CONFIG.jwt_encryption, { expiresIn: expiration_time })
+    const params = {
+      userId: this.id,
+      email: this.email,
+      username: this.username
+    }
+    const token = jwt.sign(params, CONFIG.jwt_encryption, { expiresIn: expiration_time })
     return `Bearer ${token}`
   }
 

@@ -43,7 +43,7 @@ const auth = async (req, res) => {
   if (!user) {
     return res
       .status(401)
-      .json({ success: false, message: 'Email no registrado' })
+      .json({ success: false, message: 'Usuario o email no registrado' })
   }
   try {
     await user.comparePassword(password)
