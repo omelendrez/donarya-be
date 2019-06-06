@@ -5,7 +5,7 @@ const { throwErr } = require('../helpers')
 
 module.exports = (sequelize, type) => {
   const Model = sequelize.define('User', {
-    name: type.STRING,
+    fullName: type.STRING,
     username: type.STRING,
     dni: type.NUMERIC,
     phone: type.STRING,
@@ -31,14 +31,14 @@ module.exports = (sequelize, type) => {
     return this
   }
 
-  Model.prototype.getJWT = function () {
-    let expiration_time = parseInt(CONFIG.jwt_expiration)
-    return (
-      'Bearer ' +
-      jwt.sign({ user_id: this.id }, CONFIG.jwt_encryption, {
-        expiresIn: expiration_time
-      })
-    )
+  Model.prototype.getToken = function () {
+    const expiration_time = parseInt(CONFIG.jwt_expiration)
+    const token = jwt.sign({ userId: this.id }, CONFIG.jwt_encryption, { expiresIn: expiration_time })
+    return `Bearer ${token}`
+  }
+
+  Model.prototype.getData = function () {
+    return this.toJSON()
   }
 
   return Model
