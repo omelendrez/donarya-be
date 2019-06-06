@@ -21,20 +21,15 @@ const auth = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ where: { email: email } })
   if (!user) {
-    return res.status(403).json({ message: 'Email o password incorrectos' })
+    return res.status(401).json({ message: 'Email no registrado' })
   }
   try {
     await user.comparePassword(password)
   } catch (error) {
-    return res.status(403).json({ error, message: 'Email o password incorrectos' })
+    return res.status(401).json({ error, message: 'Contraseña incorrecta' })
   }
 
-  const { fullName, username, dni, address, phone, createdAt, updatedAt } = user
+  res.status(200).json({ message: 'Ok', user: user.getData(), token: user.getJWT() })
 
-  const data = {
-    fullName, email, username, dni, address, phone, createdAt, updatedAt
-  }
-
-  res.status(200).json({ message: 'Autenticación satifactoria', data, token: user.getJWT() })
 }
 module.exports.auth = auth
