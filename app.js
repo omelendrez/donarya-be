@@ -4,20 +4,18 @@ const bodyParser = require('body-parser')
 const pe = require('parse-error')
 
 const v1 = require('./routes/v1')
-const app = express()
-
+const models = require('./models')
 const CONFIG = require('./config')
+
+const app = express()
 
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-const models = require('./models')
-models.sequelize.authenticate().then(() => {
-  console.log('Connected to SQL database:', CONFIG.db_name)
-})
-  .catch(err => {
-    console.error('Unable to connect to SQL database:', CONFIG.db_name, err)
-  })
+
+models.sequelize.authenticate()
+  .then(() => console.log('Connected to SQL database:', CONFIG.db_name))
+  .catch(err => console.error('Unable to connect to SQL database:', CONFIG.db_name, err))
 
 if (CONFIG.app === 'dev') {
   models.sequelize.sync({ force: false }) //creates table if they do not already exist
@@ -37,16 +35,20 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
+
 app.use('/', v1)
+
 app.use('/', function (req, res) {
   res.statusCode = 422
   res.json({ success: false, error: 'Endpoint not found', data: {} })
 })
+
 app.use(function (req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
   next(err)
 })
+
 app.use(function (err, req, res, next) {
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}

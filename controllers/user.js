@@ -3,9 +3,9 @@ const { User } = require('../models')
 const create = async (req, res) => {
   return User.create(req.body)
     .then(user => {
-      const { name, username, email, dni, address, phone, createdAt, updatedAt } = user
+      const { fullName, username, email, dni, address, phone, createdAt, updatedAt } = user
       const data = {
-        name, email, username, dni, address, phone, createdAt, updatedAt
+        fullName, email, username, dni, address, phone, createdAt, updatedAt
       }
       res.status(201).json(data)
     })
@@ -29,10 +29,10 @@ const auth = async (req, res) => {
     return res.status(403).json({ error, message: 'Email o password incorrectos' })
   }
 
-  const { name, username, dni, address, phone, createdAt, updatedAt } = user
+  const { fullName, username, dni, address, phone, createdAt, updatedAt } = user
 
   const data = {
-    name, email, username, dni, address, phone, createdAt, updatedAt
+    fullName, email, username, dni, address, phone, createdAt, updatedAt
   }
 
   res.status(200).json({ message: 'Autenticación satifactoria', data, token: user.getJWT() })

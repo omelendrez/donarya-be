@@ -5,7 +5,7 @@ const { throwErr } = require('../helpers')
 
 module.exports = (sequelize, type) => {
   const Model = sequelize.define('User', {
-    name: type.STRING,
+    fullName: type.STRING,
     username: type.STRING,
     dni: type.NUMERIC,
     phone: type.STRING,
