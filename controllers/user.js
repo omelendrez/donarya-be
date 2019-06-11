@@ -5,7 +5,7 @@ const Op = Sequelize.Op
 const { noProps } = require('../helpers')
 
 const create = async (req, res) => {
-  const { email } = req.body
+  const { email, username } = req.body
   const user = await User.findOne({ where: { [Op.or]: [{ email }, { username }] } })
   if (user) {
     return res
