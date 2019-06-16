@@ -4,17 +4,18 @@ const CONFIG = require('../config')
 const { throwErr } = require('../helpers')
 
 module.exports = (sequelize, type) => {
-  const Model = sequelize.define('User', {
+  const User = sequelize.define('user', {
     fullName: type.STRING,
     username: type.STRING,
     dni: type.NUMERIC,
+    cuit: type.STRING,
     phone: type.STRING,
     email: type.STRING,
     address: type.STRING,
     password: type.STRING
   })
 
-  Model.beforeSave(async (user, options) => {
+  User.beforeSave(async (user, options) => {
     if (user.changed('password')) {
       const salt = await bcrypt_p.genSalt(10)
       const hash = await bcrypt_p.hash(user.password, salt)
@@ -22,7 +23,7 @@ module.exports = (sequelize, type) => {
     }
   })
 
-  Model.prototype.comparePassword = async function (pw) {
+  User.prototype.comparePassword = async function (pw) {
     if (!this.password) {
       throwErr('Password was not set')
     }
@@ -31,7 +32,7 @@ module.exports = (sequelize, type) => {
     return this
   }
 
-  Model.prototype.getToken = function () {
+  User.prototype.getToken = function () {
     const expiration_time = parseInt(CONFIG.jwt_expiration)
     const params = {
       userId: this.id,
@@ -42,9 +43,9 @@ module.exports = (sequelize, type) => {
     return `Bearer ${token}`
   }
 
-  Model.prototype.getData = function () {
+  User.prototype.getData = function () {
     return this.toJSON()
   }
 
-  return Model
+  return User
 }
