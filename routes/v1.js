@@ -8,7 +8,7 @@ router.get('/api/users', User.getAll)
 router.post('/api/users', User.create)
 router.post('/api/auth', User.auth)
 
-router.get('/api/donation', Donation.getAll)
-router.post('/api/donation', Donation.create)
+router.get('/api/donations', Donation.getAll)
+router.post('/api/donations', Donation.create)
 
 module.exports = router
