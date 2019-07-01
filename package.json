@@ -2,7 +2,7 @@
   "name": "donarya-be",
   "version": "1.0.0",
   "description": "Backend for Donar Ya app",
-  "main": "app.js",
+  "main": "./bin/www",
   "scripts": {
     "dev": "node ./bin/www",
     "start": "node ./bin/www"
