@@ -1,5 +1,6 @@
 const Donation = require('../models').donation
 const DonationItem = require('../models').donation_item
+const User = require('../models').user
 const Sequelize = require('sequelize')
 const TableHints = Sequelize.TableHints;
 
@@ -40,11 +41,20 @@ module.exports.create = create
 const getAll = (req, res) => {
   DonationItem.belongsTo(Donation)
   Donation.hasMany(DonationItem)
+  Donation.belongsTo(User)
+  User.hasMany(Donation)
   return Donation
     .findAll({
       tableHint: TableHints.NOLOCK,
-      attributes: ['id', 'uuid', 'userId', 'description', 'statusId'],
+      attributes: ['id', 'uuid', 'description', 'statusId', 'createdAt', 'updatedAt'],
       include: [
+        {
+          model: User,
+          where: {
+            userId: Sequelize.col('user.id')
+          },
+          attributes: ['id', 'username', 'fullName', 'email', 'phone']
+        },
         {
           model: DonationItem,
           where: {
@@ -52,7 +62,7 @@ const getAll = (req, res) => {
           },
           attributes: ['id', 'title', 'quantity']
         }
-      ]
+      ],
     })
     .then(donations => res
       .status(200)
