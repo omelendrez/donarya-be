@@ -53,7 +53,7 @@ const getAll = (req, res) => {
           where: {
             userId: Sequelize.col('user.id')
           },
-          attributes: ['id', 'username', 'fullName', 'email', 'phone']
+          attributes: ['id', 'username', 'fullName', 'dni', 'cuit', 'email', 'phone', 'address']
         },
         {
           model: DonationItem,
