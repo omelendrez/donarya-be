@@ -54,8 +54,8 @@ const getAll = (req, res) => {
         }
       ]
     })
-    .then(donation => res
+    .then(donations => res
       .status(200)
-      .json({ success: true, donation }))
+      .json({ success: true, donations }))
 }
 module.exports.getAll = getAll
