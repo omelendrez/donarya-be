@@ -3,6 +3,7 @@ const DonationItem = require('../models').donation_item
 const User = require('../models').user
 const Sequelize = require('sequelize')
 const TableHints = Sequelize.TableHints;
+const Op = Sequelize.Op
 
 const create = async (req, res) => {
   const uuidv1 = require('uuid/v1')
@@ -43,10 +44,16 @@ const getAll = (req, res) => {
   Donation.hasMany(DonationItem)
   Donation.belongsTo(User)
   User.hasMany(Donation)
+  const query = req.query.query ? req.query.query : ''
   return Donation
     .findAll({
       tableHint: TableHints.NOLOCK,
       attributes: ['id', 'uuid', 'description', 'statusId', 'createdAt', 'updatedAt'],
+      where: {
+        description: {
+          [Op.like]: '%' + query + '%'
+        }
+      },
       include: [
         {
           model: User,
